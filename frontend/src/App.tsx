@@ -1,32 +1,27 @@
-import { Button } from '@/components/ui/button'
-import { Greet } from '../wailsjs/go/main/App'
+import { useContext } from 'react'
+import Login from './pages/Login'
+import { UserContext } from './providers/UserProvider'
+// import { ConfigContext } from './providers/ConfigProvider'
 
-import React from 'react'
+import {} from '../wailsjs/go/main/App'
 
-function App() {
-    const [count, setCount] = React.useState(0)
-    const [greet, setGreet] = React.useState('')
 
-    return (
-        <div className="min-h-screen bg-white grid place-items-center mx-auto py-8">
-            <div className="text-blue-900 text-2xl font-bold flex flex-col items-center space-y-4">
-                <h1>Vite + React + TS + Tailwind + shadcn/ui</h1>
-                <Button onClick={() => setCount(count + 1)}>Count up ({count})</Button>
-                <Button onClick={() => Greet('John').then(setGreet)}>Greet</Button>
-                <p>{greet}</p>
-                {greet && count > 0 && (
-                    <Button
-                        onClick={() => {
-                            setGreet('')
-                            setCount(0)
-                        }}
-                    >
-                        Clear
-                    </Button>
-                )}
-            </div>
-        </div>
-    )
+const App = () => {
+    const { username } = useContext(UserContext)
+    // const { _rememberUser } = useContext(ConfigContext)
+
+    // chat app
+
+    // anyone can either host a dedicated server that others can join or can join someone's server (given the IP).
+
+    // How to handle DMS? Either DMS are direct p2p connections or are per-server. Or both.
+
+    // should be able to authenticate that who is sending a message is actually who they say they are.
+    // when a user makes a connection (server or p2p) both parties agree on a passkey that must be sent by both parties before the message is actually sent.
+
+    // should be able to create a local account that encrypts all data related to the account that requires a password to unlock
+
+    return <div>{!username && <Login />}</div>
 }
 
 export default App
