@@ -14,6 +14,7 @@ type FileManager struct {
 	dataPath      string
 	configDirName string
 	configPath    string
+	logger        Logger
 }
 
 /* MAXWELL. This code is broken. You probably don't remember how, but it is. Fix it. Don't use AI. You already did that once and you learned nothing.
@@ -24,6 +25,9 @@ Bonus points if you can get the logs to readout from the file to a terminal live
 
 func NewFileManager() *FileManager {
 	fm := &FileManager{}
+
+	fm.logger = *NewLogger("FileManager")
+
 	fm.dataDirName = "p2p-chat"
 	fm.dataPath = filepath.Join(xdg.DataHome, fm.dataDirName)
 	fm.configDirName = "p2p-chat"
@@ -69,7 +73,9 @@ func (fm *FileManager) initializeAppDirs() error {
 
 func (fm *FileManager) RequestDir() (result string) {
 	result = "err"
-
+	if fm.dataPath != "" {
+		result = fm.dataPath
+	}
 	return
 }
 
