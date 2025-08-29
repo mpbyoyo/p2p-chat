@@ -21,6 +21,8 @@ var icon []byte
 func main() {
 	// Create an instance of the app structure
 	app := NewApp()
+	fileManager := NewFileManager()
+	hostService := NewHostService()
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -50,6 +52,8 @@ func main() {
 		WindowStartState:  options.Normal,
 		Bind: []interface{}{
 			app,
+			fileManager,
+			hostService,
 		},
 		// Windows platform specific options
 		Windows: &windows.Options{

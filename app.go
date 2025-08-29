@@ -3,14 +3,7 @@ package main
 import (
 	"context"
 	"errors"
-	"log"
-	"os"
-	"path/filepath"
-
-	"github.com/adrg/xdg"
 )
-
-const appName string = "p2p-chat"
 
 // App struct
 type App struct {
@@ -43,28 +36,6 @@ func (a *App) beforeClose(ctx context.Context) (prevent bool) {
 // shutdown is called at application termination
 func (a *App) shutdown(ctx context.Context) {
 	// Perform your teardown here
-}
-
-func (a *App) DoesAppHaveDir() (bool, error) {
-	appDir := filepath.Join(xdg.DataHome, appName)
-	_, err := os.Stat(appDir)
-	if err == nil {
-		return true, nil
-	}
-	if os.IsNotExist(err) {
-		return false, nil
-	}
-	return false, err
-}
-
-func (a *App) ReadAppFiles() string {
-	log.Println("Home data directory:", xdg.DataHome)
-	return xdg.DataHome
-}
-
-func (a *App) ReadAppConfig() string {
-	log.Println("Config data directory:", xdg.ConfigHome)
-	return xdg.ConfigHome
 }
 
 type User struct {
