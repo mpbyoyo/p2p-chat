@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"time"
 )
@@ -9,17 +10,28 @@ import (
 // TODO: Add some sort of log cleanup.
 
 type Logger struct {
-	service 	string
-	path    	string
+	service     string
+	path        string
 	servicePath string
 }
 
 // Service name should be class creating the log.
-func NewLogger(service string) (logger *Logger) {
+func NewLogger(service string) (logger *Logger, err error) {
 	logger = &Logger{
-		service: service,
-		path:    "temp/logs",
+		service:     service,
+		path:        "temp/logs",
 		servicePath: "temp/logs/" + service,
+	}
+
+	cumFile, err := os.OpenFile(logger.path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+
+	if err != nil {
+		return nil, err
+	}
+	serviceFile, err := os.OpenFile(logger.servicePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+
+	if err != nil {
+		return nil, err
 	}
 
 	logger.initializeLogger()
@@ -28,7 +40,8 @@ func NewLogger(service string) (logger *Logger) {
 }
 
 func (logger *Logger) initializeLogger() error {
-	err := os.MkdirAll(logger.path, 0755)
+	// err := os.MkdirAll(logger.path, 0755)
+	file, err := os.OpenFile(logger.path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
 	}
@@ -37,12 +50,12 @@ func (logger *Logger) initializeLogger() error {
 	// info/debug/error + a "sequential" log that just shows everything in chronological order, then cumulative info/debug/error
 	// logs + a cumulative sequential log.
 	for _, path := range []string{"Info", "Debug", "Error", "Sequential"} {
-		err = os.WriteFile(logger.path + "/logs.txt", []byte(fmt.Sprintf("[%s] | (initializeLogger): logger file has been created...", time.Now().String())), 0755)
-	if err != nil {
-		return err
+		err = os.WriteFile(logger.path+"/logs.txt", []byte(fmt.Sprintf("[%s] | (initializeLogger): logger file has been created...", time.Now().String())), 0755)
+		if err != nil {
+			return err
+		}
 	}
-	}
-	
+
 	return nil
 }
 
